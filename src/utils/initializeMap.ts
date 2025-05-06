@@ -28,7 +28,6 @@ export default async function initializeApp({
     container,
     width: mapWidth,
     height: mapHeight,
-    app
   });
 
   return { app, container };

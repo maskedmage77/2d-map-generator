@@ -16,26 +16,13 @@ export default function useMap() {
 
   useEffect(() => {
 
-    // let appInstance: Application | null = null;
-    // let containerInstance: Container | null = null;
-
     async function recreateApp() {
-      // Destroy the previous app instance if it exists
-      if (appInstance.current && containerInstance.current) {
-        console.log('Destroying previous app instance');
-        appInstance.current?.stage.removeChild(containerInstance.current);
-        containerInstance.current?.destroy({ children: true });
-      } else {
-        console.log('Creating new app instance');
-      }
-      // Create a new app instance
       const { app, container } = await initializeApp({
         mapContainerRef,
         mapWidth,
         mapHeight
       });
       
-      // Append the new app instance to the map container
       appInstance.current = app;
       containerInstance.current = container;
     };
@@ -46,9 +33,15 @@ export default function useMap() {
 
     return () => {
       if (appInstance) {
-        // appInstance.current?.destroy(true, { children: true });
+        appInstance.current?.destroy(true, { children: true });
       }
     };
+  }, []);
+
+  useEffect(() => {
+    if (appInstance.current) {
+      console.log('Resizing map');
+    }
   }, [mapWidth, mapHeight]);
 
   return {

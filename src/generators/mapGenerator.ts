@@ -7,14 +7,12 @@ interface MapGeneratorProps {
   container: Container;
   width: number;
   height: number;
-  app: Application<Renderer>;
 }
 
 export default async function mapGenerator({
   container,
   width,
   height,
-  app
 }: MapGeneratorProps) {
 
   const OCTAVES = 4;
@@ -28,16 +26,16 @@ export default async function mapGenerator({
   const HORIZONTAL_SIZE = width;
   const FALL_OFF = 0.25;
 
-  console.time('Falloff Map Generation 1');  
+  console.time('Falloff Map Generation');  
   const falloffMap = generateFalloffMap({
     HORIZONTAL_SIZE,
     VERTICAL_SIZE,
     PIXEL_SIZE,
     FALL_OFF
   });
-  console.timeEnd('Falloff Map Generation 1');
+  console.timeEnd('Falloff Map Generation');
 
-  console.time('Noise Generation 3');
+  console.time('Noise Generation');
   const noise = generateMap({
     falloffMap,
     HORIZONTAL_SIZE,
@@ -49,7 +47,7 @@ export default async function mapGenerator({
     LACUNARITY,
     PERSISTENCE
   });
-  console.timeEnd('Noise Generation 3');
+  console.timeEnd('Noise Generation');
 
   console.time('Rendering');
   renderer({
