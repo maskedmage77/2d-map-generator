@@ -1,9 +1,8 @@
+import generateMapParallel from './generateMapParallel';
 import generateFalloffMap from './generateFalloffMap';
 import mapStore from '../stores/mapStore';
-import generateMap from './generateMap';
 import { Container } from 'pixi.js';
 import renderer from './renderer';
-import generateMapParallel from './generateMapParallel';
 
 interface MapGeneratorProps {
   container: Container;
@@ -19,7 +18,8 @@ export default async function mapGenerator({
 
   const {
     detailLevel,
-    octaves
+    octaves,
+    seed
    } = mapStore.getState();
 
   const DETAIL_LEVEL = detailLevel;
@@ -27,7 +27,7 @@ export default async function mapGenerator({
   const LACUNARITY = 3;
   const PERSISTENCE = 0.5;
   const NOISE_RESOLUTION = 500 * DETAIL_LEVEL;
-  const SEED = Math.floor(Math.random() * 1000000);
+  const SEED = seed;
   const VERTICAL_SIZE = height * DETAIL_LEVEL;
   const HORIZONTAL_SIZE = width * DETAIL_LEVEL;
   const FALL_OFF = 0.25;

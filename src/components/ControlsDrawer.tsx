@@ -1,4 +1,4 @@
-import { Drawer, Group, NumberInput, Stack, Text } from "@mantine/core";
+import { Drawer, Group, NumberInput, Stack, Text, TextInput } from "@mantine/core";
 import { useWindowSize } from "@uidotdev/usehooks";
 import useMapStore from "../stores/mapStore";
 
@@ -13,7 +13,9 @@ export default function ControlsDrawer() {
     detailLevel,
     setDetailLevel,
     octaves,
-    setOctaves
+    setOctaves,
+    seed,
+    setSeed
   } = useMapStore();
 
   const { width: maxWidth, height: maxHeight } = useWindowSize();
@@ -71,6 +73,13 @@ export default function ControlsDrawer() {
         step={1}
         value={octaves}
         onChange={(value) => setOctaves(typeof value === "number" ? Math.min(value, 10) : 1)}
+      />
+
+      <TextInput
+        label="Seed"
+        placeholder="Seed"
+        value={seed}
+        onChange={(value) => setSeed(value.target.value)}
       />
 
     </Stack>

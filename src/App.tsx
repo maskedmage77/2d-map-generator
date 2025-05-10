@@ -1,6 +1,8 @@
 import { AppShell, createTheme, MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import MapControls from './components/MapControls';
 import useMapStore from './stores/mapStore';
+import '@mantine/notifications/styles.css';
 import useMap from './hooks/useMap';
 import '@mantine/core/styles.css';
 import './App.css';
@@ -11,7 +13,11 @@ export default function App() {
     fontFamily: 'Jost, sans-serif'
   });
 
-  const { mapContainerRef, regenerateMap } = useMap();
+  const {
+    mapContainerRef,
+    regenerateMap,
+    recenterMap
+  } = useMap();
 
   const {
     mapHeight,
@@ -19,30 +25,35 @@ export default function App() {
   } = useMapStore();
 
   return (
+    
     <MantineProvider
       theme={theme}
       defaultColorScheme="dark"
     >
-      <AppShell
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100vh',
-        }}
-      >
-        <div
-          ref={mapContainerRef}
+      <MantineProvider>
+        <AppShell
           style={{
-            width: mapWidth,
-            height: mapHeight
+            alignItems: 'center',
+            justifyContent: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100vh',
           }}
-        />
-        <MapControls 
-          regenerateMap={regenerateMap}
-        />
-      </AppShell>
+        >
+          <div
+            ref={mapContainerRef}
+            style={{
+              width: mapWidth,
+              height: mapHeight
+            }}
+          />
+          <MapControls 
+            regenerateMap={regenerateMap}
+            recenterMap={recenterMap}
+          />
+        </AppShell>
+        <Notifications />
+      </MantineProvider>
     </MantineProvider>
   );
 }

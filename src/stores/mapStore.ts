@@ -11,6 +11,8 @@ interface MapStore {
   setDetailLevel: (level: number) => void;
   octaves: number;
   setOctaves: (octaves: number) => void;
+  seed: number | string;
+  setSeed: (seed: number | string) => void;
 }
 
 const useMapStore = create<MapStore>((set) => ({
@@ -24,6 +26,8 @@ const useMapStore = create<MapStore>((set) => ({
   setDetailLevel: (level: number) => set(() => ({ detailLevel: level })),
   octaves: 8,
   setOctaves: (octaves: number) => set(() => ({ octaves: octaves })),
+  seed: Math.floor(Math.random() * 1000000),
+  setSeed: (seed: number | string) => set(() => ({ seed: seed }))
 }));
 
 export default useMapStore;

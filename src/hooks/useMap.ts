@@ -11,24 +11,37 @@ export default function useMap() {
   const {
     mapWidth,
     mapHeight,
-    detailLevel,
-    octaves
+    // detailLevel,
+    // octaves
   } = useMapStore();
   const appInstance = useRef<Application | null>(null);
   const containerInstance = useRef<Container | null>(null);
 
+  function recenterMap() {
+    if (!containerInstance.current || !appInstance.current) {
+      return;
+    }
+    containerInstance.current.position.set(0, 0);
+    containerInstance.current.scale.set(1, 1);
+  }
+
   function regenerateMap() {
     console.log('Regenerating map at: ' + new Date().toLocaleTimeString());
+    // Ensure containerInstance and appInstance are initialized
+    if (!containerInstance.current || !appInstance.current) {
+      return;
+    }
+
     // Reset the container position and zoom
-    containerInstance.current!.position.set(0, 0);
-    containerInstance.current!.scale.set(1, 1);
-    // remove the previous map
-    containerInstance.current?.removeChildren();
-    // change the app size
-    appInstance.current?.renderer.resize(mapWidth, mapHeight);
-    // generate a new map
+    containerInstance.current.position.set(0, 0);
+    containerInstance.current.scale.set(1, 1);
+    // Remove the previous map
+    containerInstance.current.removeChildren();
+    // Change the app size
+    appInstance.current.renderer.resize(mapWidth, mapHeight);
+    // Generate a new map
     mapGenerator({
-      container: containerInstance.current as Container,
+      container: containerInstance.current,
       width: mapWidth,
       height: mapHeight,
     });
@@ -41,18 +54,19 @@ export default function useMap() {
         mapWidth,
         mapHeight
       });
-      
+
       appInstance.current = app;
       containerInstance.current = container;
-    };
+    }
 
-    isInitialized.current
-      ? createInitialMap()
-      : (isInitialized.current = true);
+    if (!isInitialized.current) {
+      isInitialized.current = true;
+      createInitialMap();
+    }
 
     return () => {
-      if (appInstance) {
-        appInstance.current?.destroy(true, { children: true });
+      if (appInstance.current) {
+        appInstance.current.destroy(true, { children: true });
       }
     };
   }, []);
@@ -65,6 +79,7 @@ export default function useMap() {
 
   return {
     mapContainerRef,
-    regenerateMap
+    regenerateMap,
+    recenterMap
   }
 }

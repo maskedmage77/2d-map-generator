@@ -14,7 +14,7 @@ export default async function generateMapParallel({
   HORIZONTAL_SIZE?: number;
   VERTICAL_SIZE?: number;
   NOISE_RESOLUTION?: number;
-  SEED?: number;
+  SEED?: number | string;
   OCTAVES?: number;
   LACUNARITY?: number;
   PERSISTENCE?: number;

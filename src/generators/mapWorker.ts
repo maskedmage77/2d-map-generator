@@ -1,17 +1,14 @@
-// mapWorker.ts
-
 import { createNoise2D } from 'simplex-noise';
 import alea from 'alea';
 
 self.onmessage = function (e) {
   const {
     startRow, endRow,
-    HORIZONTAL_SIZE, VERTICAL_SIZE,
+    VERTICAL_SIZE,
     NOISE_RESOLUTION, SEED,
     OCTAVES, LACUNARITY, PERSISTENCE,
     falloffMapChunk
   } = e.data;
-  console.log('Worker started', startRow, endRow);
   const frequencies = Array.from({ length: OCTAVES }, (_, i) => Math.pow(LACUNARITY, i));
   const amplitudes = Array.from({ length: OCTAVES }, (_, i) => Math.pow(PERSISTENCE, i));
   const persistenceSum = amplitudes.reduce((sum, a) => sum + a, 0);

@@ -17,18 +17,13 @@ export default function renderer({
   const pixelData = new Uint8Array(HORIZONTAL_SIZE * VERTICAL_SIZE * 4);
 
   console.time("color-calculation");
-  const len = noise.length;  // Cache the length to avoid recalculating
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < noise.length; i++) {
     const row = noise[i];
-    const rowLen = row.length;  // Cache the row length
-    const rowOffset = i * rowLen * 4;  // Offset for the row in pixelData
-  
-    for (let j = 0; j < rowLen; j++) {
+    for (let j = 0; j < row.length; j++) {
       const value = row[j];
       const color = calculateColor(value);
-      const index = (j * 4) + rowOffset;
+      const index = (j * HORIZONTAL_SIZE + i) * 4;
       const rgb = parseInt(color.slice(1), 16);
-  
       pixelData[index] = (rgb >> 16) & 255; // Red
       pixelData[index + 1] = (rgb >> 8) & 255; // Green
       pixelData[index + 2] = rgb & 255; // Blue

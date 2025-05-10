@@ -4,10 +4,12 @@ import { Button, Group } from '@mantine/core';
 
 interface Props {
   regenerateMap: () => void;
+  recenterMap: () => void;
 }
 
 export default function MapControls({
-  regenerateMap
+  regenerateMap,
+  recenterMap
 }: Props) {
 
   const {
@@ -24,6 +26,7 @@ export default function MapControls({
           zIndex: 5,
         }}
       >
+
         <Button
           onClick={() => {
             toggleControlsDrawer();
@@ -31,6 +34,7 @@ export default function MapControls({
         >
           Map Settings
         </Button>
+
         <Button
           onClick={() => {
             regenerateMap();
@@ -38,6 +42,15 @@ export default function MapControls({
         >
           Regenerate Map
         </Button>
+
+        <Button
+          onClick={() => {
+            recenterMap();
+          }}
+        >
+          Recenter Map
+        </Button>
+
       </Group>
       <ControlsDrawer />
     </>
