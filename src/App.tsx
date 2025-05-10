@@ -11,7 +11,7 @@ export default function App() {
     fontFamily: 'Jost, sans-serif'
   });
 
-  const { mapContainerRef } = useMap();
+  const { mapContainerRef, regenerateMap } = useMap();
 
   const {
     mapHeight,
@@ -39,7 +39,9 @@ export default function App() {
             height: mapHeight
           }}
         />
-        <MapControls />
+        <MapControls 
+          regenerateMap={regenerateMap}
+        />
       </AppShell>
     </MantineProvider>
   );

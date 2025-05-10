@@ -1,7 +1,9 @@
-import mapWorker from './mapWorker?worker';
+import generateFalloffMap from './generateFalloffMap';
 import mapStore from '../stores/mapStore';
+import generateMap from './generateMap';
 import { Container } from 'pixi.js';
 import renderer from './renderer';
+import generateMapParallel from './generateMapParallel';
 
 interface MapGeneratorProps {
   container: Container;
@@ -20,29 +22,45 @@ export default async function mapGenerator({
     octaves
    } = mapStore.getState();
 
-  const worker = new mapWorker();
+  const DETAIL_LEVEL = detailLevel;
+  const OCTAVES = octaves;
+  const LACUNARITY = 3;
+  const PERSISTENCE = 0.5;
+  const NOISE_RESOLUTION = 500 * DETAIL_LEVEL;
+  const SEED = Math.floor(Math.random() * 1000000);
+  const VERTICAL_SIZE = height * DETAIL_LEVEL;
+  const HORIZONTAL_SIZE = width * DETAIL_LEVEL;
+  const FALL_OFF = 0.25;
 
-  console.log('Starting map generation...');
-  worker.postMessage({
-    width,
-    height,
-    detailLevel,
-    octaves
+  console.time('Falloff Map Generation');
+  const falloffMap = generateFalloffMap({
+    HORIZONTAL_SIZE,
+    VERTICAL_SIZE,
+    FALL_OFF
   });
+  console.timeEnd('Falloff Map Generation');
 
-  worker.onmessage = function (event) {
-    const { noise, HORIZONTAL_SIZE, VERTICAL_SIZE, DETAIL_LEVEL } = event.data;
+  console.time('Noise Generation');
+  const noise = await generateMapParallel({
+    falloffMap,
+    HORIZONTAL_SIZE,
+    VERTICAL_SIZE,
+    NOISE_RESOLUTION,
+    SEED,
+    OCTAVES,
+    LACUNARITY,
+    PERSISTENCE
+  });
+  console.timeEnd('Noise Generation');
 
-    console.log('Map generation completed. Starting rendering...');
-    console.time('Rendering');
-    renderer({
-      noise,
-      container,
-      HORIZONTAL_SIZE,
-      VERTICAL_SIZE,
-      DETAIL_LEVEL
-    });
-    console.timeEnd('Rendering');
-    console.log('Rendering completed.');
-  };
+  console.time('Rendering');
+  renderer({
+    noise,
+    container,
+    HORIZONTAL_SIZE,
+    VERTICAL_SIZE,
+    DETAIL_LEVEL
+  });
+  console.timeEnd('Rendering');
+  console.log('Rendering completed.');
 }

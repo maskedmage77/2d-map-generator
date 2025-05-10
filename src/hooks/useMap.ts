@@ -17,8 +17,24 @@ export default function useMap() {
   const appInstance = useRef<Application | null>(null);
   const containerInstance = useRef<Container | null>(null);
 
-  useEffect(() => {
+  function regenerateMap() {
+    console.log('Regenerating map at: ' + new Date().toLocaleTimeString());
+    // Reset the container position and zoom
+    containerInstance.current!.position.set(0, 0);
+    containerInstance.current!.scale.set(1, 1);
+    // remove the previous map
+    containerInstance.current?.removeChildren();
+    // change the app size
+    appInstance.current?.renderer.resize(mapWidth, mapHeight);
+    // generate a new map
+    mapGenerator({
+      container: containerInstance.current as Container,
+      width: mapWidth,
+      height: mapHeight,
+    });
+  }
 
+  useEffect(() => {
     async function createInitialMap() {
       const { app, container } = await initializeApp({
         mapContainerRef,
@@ -43,24 +59,12 @@ export default function useMap() {
 
   useEffect(() => {
     if (appInstance.current) {
-      console.log('Regenerating map at: ' + new Date().toLocaleTimeString());
-      // Reset the container position and zoom
-      containerInstance.current!.position.set(0, 0);
-      containerInstance.current!.scale.set(1, 1);
-      // remove the previous map
-      containerInstance.current?.removeChildren();
-      // change the app size
-      appInstance.current?.renderer.resize(mapWidth, mapHeight);
-      // generate a new map
-      mapGenerator({
-        container: containerInstance.current as Container,
-        width: mapWidth,
-        height: mapHeight,
-      });
+      regenerateMap();
     }
-  }, [mapWidth, mapHeight, detailLevel, octaves]);
+  }, []);
 
   return {
-    mapContainerRef
+    mapContainerRef,
+    regenerateMap
   }
 }

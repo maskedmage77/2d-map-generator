@@ -1,39 +1,40 @@
-import generateFalloffMap from './generateFalloffMap';
-import generateMap from './generateMap';
+// mapWorker.ts
 
-self.onmessage = async function (event) {
-  const { width, height, detailLevel, octaves } = event.data;
+import { createNoise2D } from 'simplex-noise';
+import alea from 'alea';
 
-  const DETAIL_LEVEL = detailLevel;
-  const OCTAVES = octaves;
-  const LACUNARITY = 3;
-  const PERSISTENCE = 0.5;
-  const NOISE_RESOLUTION = 500 * DETAIL_LEVEL;
-  const SEED = Math.floor(Math.random() * 1000000);
-  const VERTICAL_SIZE = height * DETAIL_LEVEL;
-  const HORIZONTAL_SIZE = width * DETAIL_LEVEL;
-  const FALL_OFF = 0.25;
+self.onmessage = function (e) {
+  const {
+    startRow, endRow,
+    HORIZONTAL_SIZE, VERTICAL_SIZE,
+    NOISE_RESOLUTION, SEED,
+    OCTAVES, LACUNARITY, PERSISTENCE,
+    falloffMapChunk
+  } = e.data;
+  console.log('Worker started', startRow, endRow);
+  const frequencies = Array.from({ length: OCTAVES }, (_, i) => Math.pow(LACUNARITY, i));
+  const amplitudes = Array.from({ length: OCTAVES }, (_, i) => Math.pow(PERSISTENCE, i));
+  const persistenceSum = amplitudes.reduce((sum, a) => sum + a, 0);
+  const octaveNoise = Array.from({ length: OCTAVES }, (_, i) => createNoise2D(alea(`${SEED}-${i}`)));
 
-  console.time('Falloff Map Generation');
-  const falloffMap = generateFalloffMap({
-    HORIZONTAL_SIZE,
-    VERTICAL_SIZE,
-    FALL_OFF
-  });
-  console.timeEnd('Falloff Map Generation');
+  const result: number[][] = [];
 
-  console.time('Noise Generation');
-  const noise = generateMap({
-    falloffMap,
-    HORIZONTAL_SIZE,
-    VERTICAL_SIZE,
-    NOISE_RESOLUTION,
-    SEED,
-    OCTAVES,
-    LACUNARITY,
-    PERSISTENCE
-  });
-  console.timeEnd('Noise Generation');
+  for (let i = startRow; i < endRow; i++) {
+    const row: number[] = [];
+    for (let j = 0; j < VERTICAL_SIZE; j++) {
+      let baseNoise = 0;
 
-  self.postMessage({ noise, HORIZONTAL_SIZE, VERTICAL_SIZE, DETAIL_LEVEL });
+      for (let octave = 0; octave < OCTAVES; octave++) {
+        const x = (i / NOISE_RESOLUTION) * frequencies[octave];
+        const y = (j / NOISE_RESOLUTION) * frequencies[octave];
+        baseNoise += ((octaveNoise[octave](x, y) + 1) / 2) * amplitudes[octave];
+      }
+
+      baseNoise /= persistenceSum;
+      row.push(falloffMapChunk[i - startRow][j] * baseNoise);
+    }
+    result.push(row);
+  }
+
+  self.postMessage({ startRow, result });
 };

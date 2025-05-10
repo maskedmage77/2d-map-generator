@@ -20,9 +20,9 @@ const useMapStore = create<MapStore>((set) => ({
   mapHeight: 720,
   setMapWidth: (width: number) => set(() => ({ mapWidth: width })),
   setMapHeight: (height: number) => set(() => ({ mapHeight: height })),
-  detailLevel: 1,
+  detailLevel: 8,
   setDetailLevel: (level: number) => set(() => ({ detailLevel: level })),
-  octaves: 4,
+  octaves: 8,
   setOctaves: (octaves: number) => set(() => ({ octaves: octaves })),
 }));
 

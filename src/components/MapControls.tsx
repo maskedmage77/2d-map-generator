@@ -1,8 +1,14 @@
 import ControlsDrawer from './ControlsDrawer';
 import useMapStore from '../stores/mapStore';
-import { Button } from '@mantine/core';
+import { Button, Group } from '@mantine/core';
 
-export default function MapControls() {
+interface Props {
+  regenerateMap: () => void;
+}
+
+export default function MapControls({
+  regenerateMap
+}: Props) {
 
   const {
     toggleControlsDrawer,
@@ -10,10 +16,7 @@ export default function MapControls() {
 
   return (
     <>
-      <Button
-        onClick={() => {
-          toggleControlsDrawer();
-        }}
+      <Group
         style={{
           position: 'absolute',
           top: 16,
@@ -21,8 +24,21 @@ export default function MapControls() {
           zIndex: 5,
         }}
       >
-        Map Settings
-      </Button>
+        <Button
+          onClick={() => {
+            toggleControlsDrawer();
+          }}
+        >
+          Map Settings
+        </Button>
+        <Button
+          onClick={() => {
+            regenerateMap();
+          }}
+        >
+          Regenerate Map
+        </Button>
+      </Group>
       <ControlsDrawer />
     </>
   )
