@@ -62,6 +62,10 @@ export default function enableZoomAndPan(
   container.on('pointerdown', (event: FederatedPointerEvent) => {
     isPanning = true;
     panStart = { x: event.global.x - container.x, y: event.global.y - container.y };
+
+    if (mapContainerRef.current) {
+      mapContainerRef.current.style.cursor = 'grabbing';
+    }
   });
 
   container.on('pointermove', (event: FederatedPointerEvent) => {
@@ -73,9 +77,17 @@ export default function enableZoomAndPan(
 
   container.on('pointerup', () => {
     isPanning = false;
+
+    if (mapContainerRef.current) {
+      mapContainerRef.current.style.cursor = 'default';
+    }
   });
 
   container.on('pointerupoutside', () => {
     isPanning = false;
+
+    if (mapContainerRef.current) {
+      mapContainerRef.current.style.cursor = 'default';
+    }
   });
 }
