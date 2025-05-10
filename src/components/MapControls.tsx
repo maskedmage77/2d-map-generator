@@ -21,7 +21,7 @@ export default function MapControls() {
           zIndex: 5,
         }}
       >
-        Map Controls
+        Map Settings
       </Button>
       <ControlsDrawer />
     </>

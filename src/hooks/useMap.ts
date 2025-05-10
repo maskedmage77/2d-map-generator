@@ -11,22 +11,10 @@ export default function useMap() {
   const {
     mapWidth,
     mapHeight,
+    detailLevel
   } = useMapStore();
   const appInstance = useRef<Application | null>(null);
   const containerInstance = useRef<Container | null>(null);
-
-  async function generateMap() {
-    // remove the previous map
-    containerInstance.current?.removeChildren();
-    // change the app size
-    appInstance.current?.renderer.resize(mapWidth, mapHeight);
-    // generate a new map
-      mapGenerator({
-        container: containerInstance.current as Container,
-        width: mapWidth,
-        height: mapHeight,
-      });
-  }
 
   useEffect(() => {
 
@@ -55,9 +43,21 @@ export default function useMap() {
   useEffect(() => {
     if (appInstance.current) {
       console.log('Regenerating map at: ' + new Date().toLocaleTimeString());
-      generateMap();
+      // Reset the container position and zoom
+      containerInstance.current!.position.set(0, 0);
+      containerInstance.current!.scale.set(1, 1);
+      // remove the previous map
+      containerInstance.current?.removeChildren();
+      // change the app size
+      appInstance.current?.renderer.resize(mapWidth, mapHeight);
+      // generate a new map
+      mapGenerator({
+        container: containerInstance.current as Container,
+        width: mapWidth,
+        height: mapHeight,
+      });
     }
-  }, [mapWidth, mapHeight]);
+  }, [mapWidth, mapHeight, detailLevel]);
 
   return {
     mapContainerRef

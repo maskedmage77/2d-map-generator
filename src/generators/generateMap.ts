@@ -5,7 +5,6 @@ export default function generateMap({
   falloffMap,
   HORIZONTAL_SIZE = 512,
   VERTICAL_SIZE = 512,
-  PIXEL_SIZE = 1,
   NOISE_RESOLUTION = 500,
   SEED = Math.floor(Math.random() * 1000000),
   OCTAVES = 4,
@@ -15,7 +14,6 @@ export default function generateMap({
   falloffMap: number[][]
   HORIZONTAL_SIZE?: number;
   VERTICAL_SIZE?: number;
-  PIXEL_SIZE?: number;
   NOISE_RESOLUTION?: number;
   SEED?: number;
   OCTAVES?: number;
@@ -31,12 +29,12 @@ export default function generateMap({
   const frequencies = Array.from({ length: OCTAVES }, (_, octave) => Math.pow(LACUNARITY, octave));
   const amplitudes = Array.from({ length: OCTAVES }, (_, octave) => Math.pow(PERSISTENCE, octave));
 
-  const noise = new Array(HORIZONTAL_SIZE / PIXEL_SIZE);
+  const noise = new Array(HORIZONTAL_SIZE);
   const persistenceSum = amplitudes.reduce((acc, amplitude) => acc + amplitude, 0);
 
-  for (let i = 0; i < HORIZONTAL_SIZE / PIXEL_SIZE; i++) {
-    noise[i] = new Array(VERTICAL_SIZE / PIXEL_SIZE);
-    for (let j = 0; j < VERTICAL_SIZE / PIXEL_SIZE; j++) {
+  for (let i = 0; i < HORIZONTAL_SIZE; i++) {
+    noise[i] = new Array(VERTICAL_SIZE);
+    for (let j = 0; j < VERTICAL_SIZE; j++) {
       let baseNoise = 0;
 
       for (let octave = 0; octave < OCTAVES; octave++) {

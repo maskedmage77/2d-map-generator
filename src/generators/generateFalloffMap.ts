@@ -1,16 +1,14 @@
 export default function generateFalloffMap1({
   HORIZONTAL_SIZE = 512,
   VERTICAL_SIZE = 512,
-  PIXEL_SIZE = 1,
   FALL_OFF = 0.2
 }: {
   HORIZONTAL_SIZE?: number;
   VERTICAL_SIZE?: number;
-  PIXEL_SIZE?: number;
   FALL_OFF?: number;
 }) {
-  const falloffMap = Array.from({ length: HORIZONTAL_SIZE / PIXEL_SIZE }, (_, i) => {
-    return Array.from({ length: VERTICAL_SIZE / PIXEL_SIZE }, (_, j) => {
+  const falloffMap = Array.from({ length: HORIZONTAL_SIZE }, (_, i) => {
+    return Array.from({ length: VERTICAL_SIZE }, (_, j) => {
 
         const edgeDistance = Math.min(
           i / (FALL_OFF * HORIZONTAL_SIZE),

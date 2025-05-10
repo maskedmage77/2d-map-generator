@@ -1,7 +1,8 @@
-import { Application, Container, Renderer } from 'pixi.js';
 import generateFalloffMap from './generateFalloffMap';
 import generateMap from './generateMap';
+import { Container } from 'pixi.js';
 import renderer from './renderer';
+import mapStore from '../stores/mapStore';
 
 interface MapGeneratorProps {
   container: Container;
@@ -15,22 +16,25 @@ export default async function mapGenerator({
   height,
 }: MapGeneratorProps) {
 
+  const { 
+    detailLevel
+  } = mapStore.getState();
+
+  const DETAIL_LEVEL = detailLevel;
   const OCTAVES = 4;
   const LACUNARITY = 3;
   const PERSISTENCE = 0.5;
-  const PIXEL_SIZE = 1;
-  const NOISE_RESOLUTION = 500;
+  const NOISE_RESOLUTION = 500 * DETAIL_LEVEL;
   const SEED = Math.floor(Math.random() * 1000000);
   // const SEED = 1234567890; // for testing
-  const VERTICAL_SIZE = height;
-  const HORIZONTAL_SIZE = width;
+  const VERTICAL_SIZE = height * DETAIL_LEVEL;
+  const HORIZONTAL_SIZE = width * DETAIL_LEVEL;
   const FALL_OFF = 0.25;
 
   console.time('Falloff Map Generation');  
   const falloffMap = generateFalloffMap({
     HORIZONTAL_SIZE,
     VERTICAL_SIZE,
-    PIXEL_SIZE,
     FALL_OFF
   });
   console.timeEnd('Falloff Map Generation');
@@ -40,7 +44,6 @@ export default async function mapGenerator({
     falloffMap,
     HORIZONTAL_SIZE,
     VERTICAL_SIZE,
-    PIXEL_SIZE,
     NOISE_RESOLUTION,
     SEED,
     OCTAVES,
@@ -54,7 +57,8 @@ export default async function mapGenerator({
     noise,
     container,
     HORIZONTAL_SIZE,
-    VERTICAL_SIZE
+    VERTICAL_SIZE,
+    DETAIL_LEVEL
   });
   console.timeEnd('Rendering');
 

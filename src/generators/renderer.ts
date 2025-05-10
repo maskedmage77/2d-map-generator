@@ -5,12 +5,14 @@ export default function renderer({
   noise,
   container,
   HORIZONTAL_SIZE = 1080,
-  VERTICAL_SIZE = 720
+  VERTICAL_SIZE = 720,
+  DETAIL_LEVEL = 1,
 } : {
   noise: number[][],
   container: Container,
   HORIZONTAL_SIZE?: number,
-  VERTICAL_SIZE?: number
+  VERTICAL_SIZE?: number,
+  DETAIL_LEVEL?: number,
 }) {
   const pixelData = new Uint8Array(HORIZONTAL_SIZE * VERTICAL_SIZE * 4);
 
@@ -36,7 +38,11 @@ export default function renderer({
   }
   const texture = Texture.from(canvas);
   const sprite = new Sprite(texture);
+  
+  container.scale.set(
+    1 / DETAIL_LEVEL,
+    1 / DETAIL_LEVEL
+  );
 
   container.addChild(sprite);
-  
 }

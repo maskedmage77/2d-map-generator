@@ -7,6 +7,8 @@ interface MapStore {
   mapHeight: number;
   setMapWidth: (width: number) => void;
   setMapHeight: (height: number) => void;
+  detailLevel: number;
+  setDetailLevel: (level: number) => void;
 }
 
 const useMapStore = create<MapStore>((set) => ({
@@ -15,7 +17,9 @@ const useMapStore = create<MapStore>((set) => ({
   mapWidth: 1280,
   mapHeight: 720,
   setMapWidth: (width: number) => set(() => ({ mapWidth: width })),
-  setMapHeight: (height: number) => set(() => ({ mapHeight: height }))
+  setMapHeight: (height: number) => set(() => ({ mapHeight: height })),
+  detailLevel: 1,
+  setDetailLevel: (level: number) => set(() => ({ detailLevel: level })),
 }));
 
 export default useMapStore;

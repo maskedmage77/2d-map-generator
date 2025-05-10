@@ -1,4 +1,4 @@
-import { Drawer, Group, NumberInput, Stack, Title, Text } from "@mantine/core";
+import { Drawer, Group, NumberInput, Stack, Text } from "@mantine/core";
 import { useWindowSize } from "@uidotdev/usehooks";
 import useMapStore from "../stores/mapStore";
 
@@ -9,7 +9,9 @@ export default function ControlsDrawer() {
     mapWidth,
     mapHeight,
     setMapWidth,
-    setMapHeight
+    setMapHeight,
+    detailLevel,
+    setDetailLevel
   } = useMapStore();
 
   const { width: maxWidth, height: maxHeight } = useWindowSize();
@@ -22,11 +24,12 @@ export default function ControlsDrawer() {
       }}
     >
 
-     <Stack gap="0">
-      <Text mb="md">
+     <Stack >
+
+      <Text >
         Warning! Changing map settings will trigger the map to be regenerated.
       </Text>
-      <Title order={3} m="0">Width</Title>
+
         <Group grow>
           <NumberInput
             label="Width"
@@ -41,12 +44,22 @@ export default function ControlsDrawer() {
             label="Height"
             placeholder="Height"
             min={360}
-            max={3840}
+            max={maxHeight ?? 3840}
             step={20}
-            value={maxHeight ?? 3840}
+            value={mapHeight}
             onChange={(value) => setMapHeight(typeof value === "number" ? Math.min(value, maxHeight ?? 3840) : 360)}
           />
         </Group>
+
+        <NumberInput
+            label="Detail Level"
+            placeholder="Detail Level"
+            min={1}
+            max={4}
+            step={1}
+            value={detailLevel}
+            onChange={(value) => setDetailLevel(typeof value === "number" ? Math.min(value, 4) : 1)}
+          />
      </Stack>
 
     </Drawer>
