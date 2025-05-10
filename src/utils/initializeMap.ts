@@ -1,4 +1,5 @@
 import mapGenerator from '../generators/mapGenerator';
+import enableZoomAndPan from './enableZoomAndPan';
 import { Application, Container } from 'pixi.js';
 import React from 'react'
 
@@ -29,6 +30,8 @@ export default async function initializeApp({
     width: mapWidth,
     height: mapHeight,
   });
+
+  enableZoomAndPan(container, mapContainerRef);
 
   return { app, container };
 }

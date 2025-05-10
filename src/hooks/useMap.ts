@@ -1,3 +1,4 @@
+import mapGenerator from "../generators/mapGenerator";
 import initializeApp from "../utils/initializeMap";
 import { Application, Container } from "pixi.js";
 import useMapStore from "../stores/mapStore";
@@ -14,9 +15,22 @@ export default function useMap() {
   const appInstance = useRef<Application | null>(null);
   const containerInstance = useRef<Container | null>(null);
 
+  async function generateMap() {
+    // remove the previous map
+    containerInstance.current?.removeChildren();
+    // change the app size
+    appInstance.current?.renderer.resize(mapWidth, mapHeight);
+    // generate a new map
+      mapGenerator({
+        container: containerInstance.current as Container,
+        width: mapWidth,
+        height: mapHeight,
+      });
+  }
+
   useEffect(() => {
 
-    async function recreateApp() {
+    async function createInitialMap() {
       const { app, container } = await initializeApp({
         mapContainerRef,
         mapWidth,
@@ -28,7 +42,7 @@ export default function useMap() {
     };
 
     isInitialized.current
-      ? recreateApp()
+      ? createInitialMap()
       : (isInitialized.current = true);
 
     return () => {
@@ -40,7 +54,8 @@ export default function useMap() {
 
   useEffect(() => {
     if (appInstance.current) {
-      console.log('Resizing map');
+      console.log('Regenerating map at: ' + new Date().toLocaleTimeString());
+      generateMap();
     }
   }, [mapWidth, mapHeight]);
 
