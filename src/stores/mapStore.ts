@@ -9,6 +9,8 @@ interface MapStore {
   setMapHeight: (height: number) => void;
   detailLevel: number;
   setDetailLevel: (level: number) => void;
+  octaves: number;
+  setOctaves: (octaves: number) => void;
 }
 
 const useMapStore = create<MapStore>((set) => ({
@@ -20,6 +22,8 @@ const useMapStore = create<MapStore>((set) => ({
   setMapHeight: (height: number) => set(() => ({ mapHeight: height })),
   detailLevel: 1,
   setDetailLevel: (level: number) => set(() => ({ detailLevel: level })),
+  octaves: 4,
+  setOctaves: (octaves: number) => set(() => ({ octaves: octaves })),
 }));
 
 export default useMapStore;
