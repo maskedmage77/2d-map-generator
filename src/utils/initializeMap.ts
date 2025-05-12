@@ -16,7 +16,7 @@ export default async function initializeApp({
 
   if (mapContainerRef.current) {
     await app.init({ 
-      background: '#04223f', 
+      background: 'black', 
       resizeTo: mapContainerRef.current
     });
   }

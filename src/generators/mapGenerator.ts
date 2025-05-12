@@ -19,7 +19,8 @@ export default async function mapGenerator({
   const {
     detailLevel,
     octaves,
-    seed
+    seed,
+    style
    } = mapStore.getState();
 
   const DETAIL_LEVEL = detailLevel;
@@ -31,6 +32,7 @@ export default async function mapGenerator({
   const VERTICAL_SIZE = height * DETAIL_LEVEL;
   const HORIZONTAL_SIZE = width * DETAIL_LEVEL;
   const FALL_OFF = 0.25;
+  const STYLE = style;
 
   console.time('Falloff Map Generation');
   const falloffMap = generateFalloffMap({
@@ -59,7 +61,8 @@ export default async function mapGenerator({
     container,
     HORIZONTAL_SIZE,
     VERTICAL_SIZE,
-    DETAIL_LEVEL
+    DETAIL_LEVEL,
+    STYLE
   });
   console.timeEnd('Rendering');
   console.log('Rendering completed.');

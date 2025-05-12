@@ -1,5 +1,6 @@
 import { Container, Sprite, Texture } from "pixi.js";
 import calculateColor from "./calculateColor";
+import { MapStyle } from "../types/MapStyle";
 
 export default function renderer({
   noise,
@@ -7,12 +8,14 @@ export default function renderer({
   HORIZONTAL_SIZE = 1080,
   VERTICAL_SIZE = 720,
   DETAIL_LEVEL = 1,
+  STYLE = "default",
 } : {
   noise: number[][],
   container: Container,
   HORIZONTAL_SIZE?: number,
   VERTICAL_SIZE?: number,
   DETAIL_LEVEL?: number,
+  STYLE?: MapStyle,
 }) {
   const pixelData = new Uint8Array(HORIZONTAL_SIZE * VERTICAL_SIZE * 4);
 
@@ -21,7 +24,7 @@ export default function renderer({
     const row = noise[i];
     for (let j = 0; j < row.length; j++) {
       const value = row[j];
-      const color = calculateColor(value);
+      const color = calculateColor(value, STYLE);
       const index = (j * HORIZONTAL_SIZE + i) * 4;
       const rgb = parseInt(color.slice(1), 16);
       pixelData[index] = (rgb >> 16) & 255; // Red

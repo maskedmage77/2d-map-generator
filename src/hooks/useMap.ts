@@ -11,7 +11,7 @@ export default function useMap() {
   const {
     mapWidth,
     mapHeight,
-    // detailLevel,
+    detailLevel,
     // octaves
   } = useMapStore();
   const appInstance = useRef<Application | null>(null);
@@ -22,7 +22,7 @@ export default function useMap() {
       return;
     }
     containerInstance.current.position.set(0, 0);
-    containerInstance.current.scale.set(1, 1);
+    containerInstance.current.scale.set(1 / detailLevel, 1 / detailLevel);
   }
 
   function regenerateMap() {

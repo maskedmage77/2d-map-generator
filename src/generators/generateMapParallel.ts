@@ -1,4 +1,4 @@
-import MapWorker from './mapWorker?worker';
+import NoiseGenerationWorker from './noiseGenerationWorker?worker';
 
 export default async function generateMapParallel({
   falloffMap,
@@ -26,7 +26,7 @@ export default async function generateMapParallel({
     const startRow = index * chunkSize;
     const endRow = index === WORKER_COUNT - 1 ? HORIZONTAL_SIZE : startRow + chunkSize;
 
-    const worker = new MapWorker();
+    const worker = new NoiseGenerationWorker();
     const falloffMapChunk = falloffMap.slice(startRow, endRow);
 
     return new Promise<number[][]>((resolve) => {

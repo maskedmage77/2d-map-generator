@@ -1,6 +1,7 @@
-import { Drawer, Group, NumberInput, Stack, Text, TextInput } from "@mantine/core";
+import { Drawer, Group, NumberInput, Select, Stack, Text, TextInput } from "@mantine/core";
 import { useWindowSize } from "@uidotdev/usehooks";
 import useMapStore from "../stores/mapStore";
+import { MapStyle } from "../types/MapStyle";
 
 export default function ControlsDrawer() {
 
@@ -15,7 +16,9 @@ export default function ControlsDrawer() {
     octaves,
     setOctaves,
     seed,
-    setSeed
+    setSeed,
+    style,
+    setStyle
   } = useMapStore();
 
   const { width: maxWidth, height: maxHeight } = useWindowSize();
@@ -80,6 +83,23 @@ export default function ControlsDrawer() {
         placeholder="Seed"
         value={seed}
         onChange={(value) => setSeed(value.target.value)}
+      />
+
+      <Select
+        label="Map Style"
+        placeholder="Map Style"
+        data={[
+          { value: "default", label: "Default" },
+          { value: "paper", label: "Paper" },
+          { value: "black and white", label: "Black and White (noise level)" },
+          { value: "pastel", label: "Pastel" },
+        ]}
+        value={style}
+        onChange={(value: string | null) => {
+          if (value !== null) {
+            setStyle(value as MapStyle);
+          }
+        }}
       />
 
     </Stack>

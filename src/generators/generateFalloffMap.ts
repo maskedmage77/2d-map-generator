@@ -1,4 +1,4 @@
-export default function generateFalloffMap1({
+export default function generateFalloffMap({
   HORIZONTAL_SIZE = 512,
   VERTICAL_SIZE = 512,
   FALL_OFF = 0.2
