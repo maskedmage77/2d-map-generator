@@ -16,7 +16,8 @@ export default function App() {
   const {
     mapContainerRef,
     regenerateMap,
-    recenterMap
+    recenterMap,
+    saveMap
   } = useMap();
 
   const {
@@ -50,6 +51,7 @@ export default function App() {
           <MapControls 
             regenerateMap={regenerateMap}
             recenterMap={recenterMap}
+            saveMap={saveMap}
           />
         </AppShell>
         <Notifications />

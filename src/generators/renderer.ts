@@ -45,6 +45,16 @@ export default function renderer({
   }
   const texture = Texture.from(canvas);
   const sprite = new Sprite(texture);
+
+  // canvas.toBlob((blob) => {
+  //   if (blob) {
+  //     const a = document.createElement('a');
+  //     a.href = URL.createObjectURL(blob);
+  //     a.download = 'map.png';
+  //     a.click();
+  //     URL.revokeObjectURL(a.href);
+  //   }
+  // }, 'image/png');
   
   container.scale.set(
     1 / DETAIL_LEVEL,

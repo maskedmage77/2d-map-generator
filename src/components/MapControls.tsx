@@ -5,11 +5,13 @@ import { Button, Group } from '@mantine/core';
 interface Props {
   regenerateMap: () => void;
   recenterMap: () => void;
+  saveMap: () => void;
 }
 
 export default function MapControls({
   regenerateMap,
-  recenterMap
+  recenterMap,
+  saveMap,
 }: Props) {
 
   const {
@@ -49,6 +51,14 @@ export default function MapControls({
           }}
         >
           Recenter Map
+        </Button>
+
+        <Button
+          onClick={() => {
+            saveMap();
+          }}
+        >
+          Save Map
         </Button>
 
       </Group>

@@ -17,7 +17,8 @@ export default async function initializeApp({
   if (mapContainerRef.current) {
     await app.init({ 
       background: 'black', 
-      resizeTo: mapContainerRef.current
+      resizeTo: mapContainerRef.current,
+      preserveDrawingBuffer: true,
     });
   }
 
